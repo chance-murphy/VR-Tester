@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Group: Corbet Griffith, Adrienne Royce, Kara Dailey, Caitlyn Helgeson, Chance Murphy, Min Jin Kim -->
+    <title>VR GARDEN</title>
+    <meta name="description" content="VR GARDEN " />
+    <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
+
+    <!--environment code from https://github.com/supermedium/aframe-environment-component , Michael's turnip files and Don Mccurdy-->
+    <script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.0.1/dist/aframe-extras.min.js"></script>
+    <script src="https://unpkg.com/aframe-animation-component@^4.1.2/dist/aframe-animation-component.min.js"></script>
+    <script src="https://rawgit.com/Utopiah/googlepoly-load-component/master/googlepoly-load-component.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component/dist/aframe-event-set-component.min.js"></script>
+    <style>
+      a-scene {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <a-scene>
+      shadow="type: pcfsoft"
+      <!-- Out of the box environment! -->
+      <a-entity environment="preset: forest"></a-entity>
+
+      <a-assets>
+        <!--Background music from https://freesound.org/people/blouhond/sounds/165269/-->
+        <audio id="background_music" src="sounds/gardenambience.mp3" preload="auto" crossorigin="anonymous"></audio>
+        <audio id="pick_sound" src="sounds/pick.mp3" preload="auto" crossorigin="anonymous"></audio>
+        <audio id="pitchfork_sound" src="sounds/pitchfork.mp3" preload="auto" crossorigin="anonymous"></audio>
+        <audio id="water_sound" src="sounds/watering.mp3" preload="auto" crossorigin="anonymous"></audio>
+        <audio id="moo" src="sounds/moo.mp3" preload="auto" crossorigin="anonymous"></audio>
+        <!-- Corbet's images-->
+        <img id="soil_img" src="img/soil.jpg" alt="water label" />
+        <img id="seeds_img" src="img/seeds.jpg" alt="seeds label" />
+        <!-- Images, models, and sound effects from ARI mtg-->
+        <img id="stoneTexture" src="https://i.imgur.com/mYmmbrp.jpg" />
+        <!-- Various Assets mostly by Google from Google Poly-->
+        <a-asset-item
+          id="pitchfork"
+          src="https://kdails.github.io/archive (2)/pitchfork.gltf"
+        ></a-asset-item>
+        <a-asset-item
+          id="jug-gltf"
+          src="https://kdails.github.io/jug/Jug_505.gltf"
+        ></a-asset-item>
+        <a-asset-item
+          id="cattle-gltf"
+          src="https://kdails.github.io/cow/Mesh_Cattle.gltf"
+        ></a-asset-item>
+        <a-asset-item
+          id="shed-gltf"
+          src="https://kdails.github.io/model_gltf_1XVubjE0oJ9_c_K5OO9TGBV/model.gltf"
+        ></a-asset-item>
+      </a-assets>
+
+
+      <!--Start Background Music-->
+      <a-entity sound="autoplay: true; src: #background_music"></a-entity>
+      <a-entity sound="autoplay: true; src: #moo"></a-entity>
+      <!--from A-Frame: https://aframe.io/docs/0.9.0/guides/building-a-basic-scene.html#tweaking-lighting -->
+      <a-light type="ambient" intensity = "0.5"></a-light>
+      <a-light type="type: directional;
+                   castShadow: true;
+                   intensity: 0.4;
+                   shadowCameraVisible: true;
+                    shadowCameraTop: 3.5
+                    shadowCameraRight: 3.5
+                     shadowCameraLeft: 3.5"
+            position="-5 3 1.5"></a-light>
+      <!--Light for shadows-->
+
+<!--       <a-entity light="type: ambient; intensity: 0.5;"></a-entity>
+       <a-entity light="type: directional;
+                   castShadow: true;
+                   intensity: 0.4;
+                   shadowCameraVisible: true;"
+            position="-5 3 1.5"></a-entity> -->
+
+      <!--code from the A-Frame instruction pages - signs for plants in beds-->
+      <a-entity
+        position="2 1.5 1"
+        geometry="primitive: plane; width: 1; height: .25"
+        material="color: #8a4911"
+      ></a-entity>
+      <a-text value="Tomato" position="1.55 1.5 1"></a-text>
+      <a-cylinder
+        position="2 1 .95"
+        radius="0.015"
+        height=".75"
+        color="#FFC65D"
+        shadow
+      ></a-cylinder>
+
+      <a-entity
+        position="-1.05 1.5 1"
+        geometry="primitive: plane; width: 1; height: .25"
+        material="color: #8a4911"
+      ></a-entity>
+      <a-text value="Lettuce" position="-1.4 1.5 1"></a-text>
+      <a-cylinder
+        position="-1.05 1 .95"
+        radius="0.015"
+        height=".75"
+        color="#FFC65D"
+        shadow
+      ></a-cylinder>
+
+      <!-- https://aframe.io/docs/master/introduction/#getting-started -->
+      <a-sky color="#ECECEC"></a-sky>
+      <a-light type="directional" position="0 0 0" rotation="-90 0 0" target="#directionaltarget">
+          <a-entity id="directionaltarget" position="0 0 -1"></a-entity>
+      </a-light>
+      <!-- Plant Seeds Asset -->
+      <!-- <a-box
+        color="white"
+        height="1"
+        width=".6"
+        depth=".05"
+        position="0 0.5 1.5"
+        id="seeds"
+        src="#seeds_img">
+        <a-animation attribute="rotation" begin="click" to="0 360 0"></a-animation>
+        <a-event name="mouseenter" scale="2.3 2.3 2.3"></a-event>
+        <a-event name="mouseleave" scale="1 1 1"></a-event>
+      </a-box> -->
+
+      <!-- Soil Bag Asset -->
+      <!-- <a-box color="white" height="1.2" width=".8" depth=".8"
+      position="-1.2 0 0" id="soil" src="#soil_img">
+      <a-animation attribute="rotation" begin="click" to="0 360 0"></a-animation>
+      <a-event name="mouseenter" scale="1.4 1.4 1.4"></a-event>
+      <a-event name="mouseleave" scale="1 1 1"></a-event>
+      </a-box> -->
+
+      <!-- started with code from https://codepen.io/mnebeling/pen/PXmNXZ-->
+      <a-box
+        position="-2 0.5 0"
+        rotation="0 90 0"
+        width="4"
+        depth="3"
+        height=".5"
+        color="#342508"
+        shadow
+      ></a-box>
+      <a-box
+        position="3 0.5 0"
+        rotation="0 90 0"
+        width="4"
+        depth="3"
+        height=".5"
+        color="#342508"
+        shadow
+      ></a-box>
+
+      <!--garden stakes-->
+      <a-cylinder
+        position="2 1.75 -1"
+        radius="0.05"
+        height="3.5"
+        color="#FFC65D"
+        shadow
+      ></a-cylinder>
+      <a-cylinder
+        position="4 1.75 -1"
+        radius="0.05"
+        height="3.5"
+        color="#FFC65D"
+        shadow
+      ></a-cylinder>
+      <a-cylinder
+        position="3 1.75 0"
+        radius="0.05"
+        height="3.5"
+        color="#FFC65D"
+        shadow
+      ></a-cylinder>
+
+      <!-- Tomatoes by Olga Nabtova: https://poly.google.com/view/dmzbb8UisNv-->
+      <a-entity
+        position="2.5 2.5 -.5"
+        scale=".01 .01 .01"
+        event-set__mousedown="scale: 5 5 5"
+        event-set__mouseup="scale: 3 3 3"
+        rotation="-90 0 0"
+        gpoly="polyid: dmzbb8UisNv; API_KEY: AIzaSyDsovdrekNH2A-NiKfMtMWA8LXebZQ41nk;"
+        sound="src: #pick_sound; on: click; autoplay: false; volume: 1"
+      ></a-entity>
+      <a-entity
+        position="2.75 3 -.75"
+        scale=".01 .01 .01"
+        event-set__mousedown="scale: 5 5 5"
+        event-set__mouseup="scale: 3 3 3"
+        rotation="-90 0 0"
+        gpoly="polyid: dmzbb8UisNv; API_KEY: AIzaSyDsovdrekNH2A-NiKfMtMWA8LXebZQ41nk;"
+        sound="src: #pick_sound; on: click; autoplay: false; volume: 1"
+      ></a-entity>
+      <a-entity
+        position="3.15 2 -.25"
+        scale=".01 .01 .01"
+        event-set__mousedown="scale: 5 5 5"
+        event-set__mouseup="scale: 3 3 3"
+        rotation="-90 0 0"
+        gpoly="polyid: dmzbb8UisNv; API_KEY: AIzaSyDsovdrekNH2A-NiKfMtMWA8LXebZQ41nk;"
+        sound="src: #pick_sound; on: click; autoplay: false; volume: 1"
+      ></a-entity>
+      <a-entity
+        position="2.25 1.75 -1"
+        scale=".01 .01 .01"
+        event-set__mousedown="scale: 5 5 5"
+        event-set__mouseup="scale: 3 3 3"
+        rotation="-90 0 0"
+        gpoly="polyid: dmzbb8UisNv; API_KEY: AIzaSyDsovdrekNH2A-NiKfMtMWA8LXebZQ41nk;"
+        sound="src: #pick_sound; on: click; autoplay: false; volume: 1"
+      ></a-entity>
+      <a-entity
+        position="3.75 3 -1"
+        scale=".01 .01 .01"
+        event-set__mousedown="scale: 5 5 5"
+        event-set__mouseup="scale: 3 3 3"
+        rotation="-90 0 0"
+        gpoly="polyid: dmzbb8UisNv; API_KEY: AIzaSyDsovdrekNH2A-NiKfMtMWA8LXebZQ41nk;"
+        sound="src: #pick_sound; on: click; autoplay: false; volume: 1"
+      ></a-entity>
+
+      <!-- Fiddlehead: https://poly.google.com/view/1RBdp6-9pZi-->
+      <a-entity
+        position="2.5 1.75 -1"
+        scale="1 2 1"
+        rotation="0 45 0"
+        gpoly="polyid: 1RBdp6-9pZi; API_KEY: AIzaSyDsovdrekNH2A-NiKfMtMWA8LXebZQ41nk;"
+      ></a-entity>
+      <a-entity
+        position="3.5 1.75 -1"
+        scale="1 2 1"
+        rotation="0 -45 0"
+        gpoly="polyid: 1RBdp6-9pZi; API_KEY: AIzaSyDsovdrekNH2A-NiKfMtMWA8LXebZQ41nk;"
+      ></a-entity>
+
+      <!-- Pitchfork by Google on Google Poly -->
+      <a-entity
+        gltf-model="#pitchfork"
+        position="0 0 2"
+        scale=".4 .4 .4"
+        event-set__mousedown="rotation: 70 140 90; position: 2 .9 1"
+        event-set__mouseup="scale: .45 .45 .45; position: -.2 .7 2; rotation: 90 180 50"
+        sound="src: #pitchfork_sound; on: click; autoplay: false; volume: 1"
+        rotation="0 170 0"
+      ></a-entity>
+
+      <!-- Watering jug interaction by kminjin -->
+      <a-entity
+            gltf-model="#jug-gltf"
+            position=".7 .1 1.4"
+            scale="0.031 0.031 0.031"
+            event-set__mouseup="scale: 0.031 0.031 0.031; position: .7 .3 .5; rotation: 0 -40 0"
+            rotation="0 -40 0"
+            sound="src: #water_sound; on: click; autoplay: false; volume: 1"
+            animation__position="property: position; dir: forward: dur: 100; easing: easeInSine; loop: false; from: .7 .3 .5; to: 3 2 1;
+                                 startEvents:mousedown"
+            animation__rotate="property: rotation; dir: forward; dur: 1000;
+                                     easing: easeInSine; loop: false; from: 0 -40 0; to: -90 -40 0;
+                                     startEvents:mousedown"
+        ></a-entity>
+
+      <!-- Apple tree by Jon Benton: https://poly.google.com/view/cpg6wP8JCyQ-->
+      <a-entity
+        position="-18 0 -20"
+        scale="1 1 1"
+        event-set__mousedown="scale: 5 5 5"
+        event-set__mouseup="scale: 3 3 3"
+        rotation="0 0 0"
+        shadow="cast: true"
+        gpoly="polyid: cpg6wP8JCyQ; API_KEY: AIzaSyDsovdrekNH2A-NiKfMtMWA8LXebZQ41nk;"
+      ></a-entity>
+      <a-circle id="ground" position="-18 0 -20" radius="8" rotation="-90 0 0" shadow="receive: true" color =  "#4d4d00"></a-circle>
+      <a-entity
+        position="-18 0 -10"
+        scale="1 1 1"
+        event-set__mousedown="scale: 5 5 5"
+        event-set__mouseup="scale: 3 3 3"
+        rotation="0 0 0"
+        shadow="cast: true"
+        gpoly="polyid: cpg6wP8JCyQ; API_KEY: AIzaSyDsovdrekNH2A-NiKfMtMWA8LXebZQ41nk;"
+      ></a-entity>
+      <a-circle id="ground2" position="-18 0 -10" radius="8" rotation="-90 0 0" shadow="receive: true" color =  "#4d4d00"></a-circle>
+
+      <a-entity
+        position="18 0 -15"
+        scale="1 1 1"
+        event-set__mousedown="scale: 5 5 5"
+        event-set__mouseup="scale: 3 3 3"
+        rotation="0 0 0"
+        shadow="cast: true"
+        gpoly="polyid: cpg6wP8JCyQ; API_KEY: AIzaSyDsovdrekNH2A-NiKfMtMWA8LXebZQ41nk;"
+      ></a-entity>
+      <a-circle id="ground3" position="18 0 -15" radius="8" rotation="-90 0 0" shadow="receive: true" color =  "#4d4d00"></a-circle>
+
+      <a-entity
+        position="18 0 -5"
+        scale="1 1 1"
+        event-set__mousedown="scale: 5 5 5"
+        event-set__mouseup="scale: 3 3 3"
+        rotation="0 0 0"
+        shadow="cast: true"
+        gpoly="polyid: cpg6wP8JCyQ; API_KEY: AIzaSyDsovdrekNH2A-NiKfMtMWA8LXebZQ41nk;"
+      ></a-entity>
+      <a-circle id="ground4" position="18 0 -5" radius="8" rotation="-90 0 0" shadow="receive: true" color =  "#4d4d00"></a-circle>
+
+      <a-entity
+        gltf-model="#shed-gltf"
+        position="2 -4.2 -10"
+        rotation="0 -110 0"
+        scale="3.4 3.4 3.4"
+      ></a-entity>
+      <a-entity
+        gltf-model="#cattle-gltf"
+        position="10 1 -12.5"
+        rotation="0 -110 0"
+        scale=".01 .01 .01"
+      ></a-entity>
+
+      <a-entity
+        gltf-model="#cattle-gltf"
+        position="-6 1 -8"
+        rotation="0 -190 0"
+        scale=".01 .01 .01"
+      ></a-entity>
+
+      <a-entity
+        gltf-model="#cattle-gltf"
+        position="12 1 -11.5"
+        rotation="0 -190 0"
+        scale=".01 .01 .01"
+      ></a-entity>
+
+      <!--kelp by Heather Askew: https://poly.google.com/view/4cFllH6Iazk  -->
+      <a-entity
+        position="-1.25 1.25 -1"
+        scale="1 1 1"
+        rotation="0 0 0"
+        gpoly="polyid: 4cFllH6Iazk; API_KEY: AIzaSyDsovdrekNH2A-NiKfMtMWA8LXebZQ41nk;"
+      ></a-entity>
+      <a-entity
+        position="-2.5 1.25 -1"
+        scale="1 1 1"
+        rotation="0 0 0"
+        gpoly="polyid: 4cFllH6Iazk; API_KEY: AIzaSyDsovdrekNH2A-NiKfMtMWA8LXebZQ41nk;"
+      ></a-entity>
+      <a-entity
+        position="-1.25 1.25 0"
+        scale="1 1 1"
+        rotation="0 0 0"
+        gpoly="polyid: 4cFllH6Iazk; API_KEY: AIzaSyDsovdrekNH2A-NiKfMtMWA8LXebZQ41nk;"
+      ></a-entity>
+      <a-entity
+        position="-2.5 1.25 0"
+        scale="1 1 1"
+        rotation="0 0 0"
+        gpoly="polyid: 4cFllH6Iazk; API_KEY: AIzaSyDsovdrekNH2A-NiKfMtMWA8LXebZQ41nk;"
+      ></a-entity>
+       <!--from Michael demo-->
+      <a-camera position="0 3 6">
+        <a-cursor color="white"></a-cursor>
+      </a-camera>
+    </a-scene>
+  </body>
+</html>
